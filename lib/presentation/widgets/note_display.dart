@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/bloc/note_bloc.dart';
-import 'package:notes/models/note_model.dart';
+import 'package:notes/logic/models/note_model.dart';
 import 'package:intl/intl.dart';
 
 class NoteDisplay extends StatelessWidget {
   final int index;
   final NoteModel note;
+
   const NoteDisplay({
     super.key,
     required this.index,
@@ -16,7 +15,6 @@ class NoteDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.read<NoteBloc>().add(DeleteNote(note: note)),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -54,7 +52,7 @@ class NoteDisplay extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat.yMd().format(note.date),
+              DateFormat.yMd().format(note.createdAt),
             ),
           ],
         ),

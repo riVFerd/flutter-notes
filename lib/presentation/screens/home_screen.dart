@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/bloc/note_bloc.dart';
-import 'package:notes/components/note_display.dart';
-import 'package:notes/models/note_model.dart';
+import 'package:notes/logic/bloc/notes_bloc.dart';
+import 'package:notes/presentation/widgets/note_display.dart';
+import 'package:notes/logic/models/note_model.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController noteTitleController;
   late TextEditingController noteContentController;
 
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       id: DateTime.now().toString(),
       title: noteTitleController.text,
       content: noteContentController.text,
-      date: DateTime.now(),
+      createdAt: DateTime.now(),
     );
     context.read<NoteBloc>().add(AddNote(note: note));
     Navigator.pop(context);
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 16),
               Expanded(
-                child: BlocBuilder<NoteBloc, NoteState>(
+                child: BlocBuilder<NoteBloc, NotesState>(
                   builder: (context, state) {
                     return ListView.builder(
                       itemCount: state.notes.length,

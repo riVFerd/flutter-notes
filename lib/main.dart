@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/bloc/note_bloc.dart';
-import 'package:notes/pages/home_page.dart';
+import 'package:notes/logic/bloc/notes_bloc.dart';
+import 'package:notes/presentation/router/app_router.dart';
 
 void main() {
   runApp(
@@ -9,8 +9,8 @@ void main() {
       providers: [
         BlocProvider(create: (context) => NoteBloc()..add(LoadNote())),
       ],
-      child: const MaterialApp(
-        home: HomePage(),
+      child: MaterialApp(
+        onGenerateRoute: AppRouter().onGenerateRoute,
         debugShowCheckedModeBanner: false,
       ),
     ),
