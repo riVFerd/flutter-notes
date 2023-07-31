@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class NoteModel extends Equatable {
@@ -40,12 +41,12 @@ class NoteModel extends Equatable {
     };
   }
 
-  factory NoteModel.fromMap(Map<String, dynamic> map) {
+  factory NoteModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return NoteModel(
-      id: map['id'],
+      id: id ?? map['id'],
       title: map['title'],
       content: map['content'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
     );
   }
 

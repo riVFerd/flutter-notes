@@ -1,63 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/logic/bloc/notes_bloc.dart';
 import 'package:notes/presentation/widgets/note_display.dart';
 import 'package:notes/logic/models/note_model.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  late TextEditingController noteTitleController;
-  late TextEditingController noteContentController;
-
-  void openDialog({NoteModel? note}) {
-    noteTitleController = TextEditingController();
-    noteContentController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: TextField(
-          autofocus: true,
-          controller: noteTitleController,
-          decoration: InputDecoration(
-            hintText: (note != null) ? note.title : "Note Title",
-          ),
-        ),
-        content: TextField(
-          maxLines: 5,
-          controller: noteContentController,
-          decoration: InputDecoration(
-            hintText: (note != null) ? note.title : "Note Content",
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => submitNote(),
-            child: const Text("Add Note"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void submitNote() {
-    var note = NoteModel(
-      id: DateTime.now().toString(),
-      title: noteTitleController.text,
-      content: noteContentController.text,
-      createdAt: DateTime.now(),
-    );
-    context.read<NoteBloc>().add(AddNote(note: note));
-    Navigator.pop(context);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // TODO: move the new notes dialog to a separate widget
+    final notesCollection = FirebaseFirestore.instance.collection('notes');
+    
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -82,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => openDialog(),
+                    onPressed: () => {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF99b7dd),
                       padding: const EdgeInsets.symmetric(
@@ -99,17 +52,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 16),
               Expanded(
-                child: BlocBuilder<NoteBloc, NotesState>(
-                  builder: (context, state) {
-                    return ListView.builder(
-                      itemCount: state.notes.length,
-                      itemBuilder: (context, index) {
-                        return NoteDisplay(
-                          index: index,
-                          note: state.notes[index],
-                        );
-                      },
-                    );
+                child: StreamBuilder(
+                  stream: notesCollection.snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final document = snapshot.data!.docs[index];
+                          return NoteDisplay(
+                            index: index,
+                            note: NoteModel.fromMap(
+                              id: document.id,
+                              document.data(),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
                 ),
               )
