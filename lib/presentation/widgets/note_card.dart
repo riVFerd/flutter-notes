@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:notes/logic/models/note_model.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/logic/models/note_model.dart';
+import 'package:notes/presentation/screens/note_detail_screen.dart';
+import 'package:notes/presentation/theme/theme_constants.dart';
 
-class NoteDisplay extends StatelessWidget {
+class NoteCard extends StatelessWidget {
   final int index;
   final NoteModel note;
 
-  const NoteDisplay({
+  const NoteCard({
     super.key,
     required this.index,
     required this.note,
@@ -15,6 +17,10 @@ class NoteDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(
+        NoteDetailScreen.routeName,
+        arguments: note,
+      ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -35,17 +41,15 @@ class NoteDisplay extends StatelessWidget {
                 children: [
                   Text(
                     note.title,
-                    style: const TextStyle(
+                    style: ThemeConstants.elipsedText.copyWith(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(
                     note.content,
-                    style: const TextStyle(
+                    style: ThemeConstants.elipsedText.copyWith(
                       fontSize: 18,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -53,6 +57,10 @@ class NoteDisplay extends StatelessWidget {
             ),
             Text(
               DateFormat.yMd().format(note.createdAt),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontSize: 12,
+                    color: Colors.black,
+                  ),
             ),
           ],
         ),

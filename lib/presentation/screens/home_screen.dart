@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/presentation/widgets/note_display.dart';
 import 'package:notes/logic/models/note_model.dart';
+import 'package:notes/presentation/theme/theme_constants.dart';
+import 'package:notes/presentation/widgets/note_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  static const routeName = '/';
+
   @override
   Widget build(BuildContext context) {
     // TODO: move the new notes dialog to a separate widget
+
     final notesCollection = FirebaseFirestore.instance.collection('notes');
-    
+
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -27,25 +31,16 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'My\nNotes',
-                    style: TextStyle(
-                      fontSize: 48,
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                   ElevatedButton(
                     onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF99b7dd),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 14,
-                      ),
-                    ),
-                    child: const Text(
+                    style: ThemeConstants.roundedButton,
+                    child: Text(
                       "Add Note",
-                      style: TextStyle(fontSize: 18),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],
@@ -64,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           final document = snapshot.data!.docs[index];
-                          return NoteDisplay(
+                          return NoteCard(
                             index: index,
                             note: NoteModel.fromMap(
                               id: document.id,
