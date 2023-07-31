@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/logic/models/note_model.dart';
+import 'package:notes/presentation/screens/note_detail_screen.dart';
 import 'package:notes/presentation/theme/theme_constants.dart';
 import 'package:notes/presentation/widgets/note_card.dart';
 
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
                   ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () => Navigator.of(context).pushNamed(NoteDetailScreen.routeName),
                     style: ThemeConstants.roundedButton,
                     child: Text(
                       "Add Note",

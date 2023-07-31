@@ -6,6 +6,9 @@ abstract final class ThemeConstants {
     displayMedium: const TextStyle(
       fontSize: 48,
     ),
+    bodyMedium: const TextStyle(
+      fontSize: 18,
+    ),
   );
 
   static final defaultTheme = ThemeData.from(

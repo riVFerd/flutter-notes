@@ -15,32 +15,6 @@ class NoteModel extends Equatable {
     required this.createdAt,
   });
 
-  @override
-  List<Object?> get props => [id, title, content, createdAt];
-
-  NoteModel copyWith({
-    String? id,
-    String? title,
-    String? content,
-    DateTime? createdAt,
-  }) {
-    return NoteModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'content': content,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-    };
-  }
-
   factory NoteModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return NoteModel(
       id: id ?? map['id'],
@@ -50,9 +24,19 @@ class NoteModel extends Equatable {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory NoteModel.fromJson(String source) {
     return NoteModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  }
+
+  @override
+  List<Object?> get props => [id, title, content, createdAt];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+    };
   }
 }

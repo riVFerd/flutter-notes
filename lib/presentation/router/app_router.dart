@@ -9,7 +9,7 @@ class AppRouter {
       case HomeScreen.routeName :
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case NoteDetailScreen.routeName :
-        final note = settings.arguments as NoteModel;
+        final note = settings.arguments as NoteModel?;
         return MaterialPageRoute(builder: (_) => NoteDetailScreen(note: note));
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());

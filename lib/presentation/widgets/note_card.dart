@@ -46,6 +46,7 @@ class NoteCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 6),
                   Text(
                     note.content,
                     style: ThemeConstants.elipsedText.copyWith(
