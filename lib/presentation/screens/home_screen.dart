@@ -12,9 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: move the new notes dialog to a separate widget
-
-    final notesCollection = FirebaseFirestore.instance.collection('notes');
+    final notesCollection = FirebaseFirestore.instance.collection('notes').orderBy('createdAt', descending: true);
 
     return SafeArea(
       child: Scaffold(

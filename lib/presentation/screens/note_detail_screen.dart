@@ -29,8 +29,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             vertical: 8,
           ),
           decoration: const BoxDecoration(color: Colors.black),
-          child:
-              (_editMode) ? addNote(context) : displayNote(context),
+          child: (_editMode) ? addNote(context) : displayNote(context),
         ),
       ),
     );
@@ -58,8 +57,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {},
-          child: const Text('Add Note'),
+          onPressed: () {
+            NoteModel newNote = NoteModel(
+              id: widget.note?.id ??
+                  DateTime.now().millisecondsSinceEpoch.toString(),
+              title: _titleController.text,
+              content: _contentController.text,
+              createdAt: DateTime.now(),
+            );
+            newNote.toFirebase(context);
+            Navigator.of(context).pop();
+          },
+          child: Text('${widget.note == null ? "Add" : "Edit"} Note'),
         ),
       ],
     );
@@ -92,7 +101,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               icon: const Icon(Icons.edit),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                widget.note!.deleteFromFirebase(context);
+                Navigator.of(context).pop();
+              },
               icon: const Icon(Icons.delete),
             ),
           ],
