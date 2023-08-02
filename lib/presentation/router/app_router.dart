@@ -11,7 +11,7 @@ class AppRouter {
       case NoteDetailScreen.routeName:
         return MaterialPageRoute(
           builder: (_) {
-            final args = settings.arguments as NoteDetailArguemnts;
+            final args = settings.arguments as NoteDetailArguments;
             return NoteDetailScreen(note: args.note, editMode: args.editMode);
           },
         );

@@ -68,7 +68,7 @@ class NoteDetailScreen extends StatelessWidget {
             newNote.toFirebase();
             Navigator.of(context).pushReplacementNamed(
               NoteDetailScreen.routeName,
-              arguments: NoteDetailArguemnts(note: newNote),
+              arguments: NoteDetailArguments(note: newNote),
             );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -115,7 +115,7 @@ class NoteDetailScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pushReplacementNamed(
                   NoteDetailScreen.routeName,
-                  arguments: NoteDetailArguemnts(
+                  arguments: NoteDetailArguments(
                     note: note,
                     editMode: true,
                   ),

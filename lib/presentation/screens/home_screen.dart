@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pushNamed(
                       NoteDetailScreen.routeName,
-                      arguments: const NoteDetailArguemnts(editMode: true),
+                      arguments: const NoteDetailArguments(editMode: true),
                     ),
                     style: ThemeConstants.roundedButton,
                     child: Text(

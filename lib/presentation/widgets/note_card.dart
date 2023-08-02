@@ -20,7 +20,7 @@ class NoteCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         NoteDetailScreen.routeName,
-        arguments: NoteDetailArguemnts(note: note),
+        arguments: NoteDetailArguments(note: note),
       ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
