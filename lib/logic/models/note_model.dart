@@ -42,23 +42,11 @@ class NoteModel extends Equatable {
   }
 
   /// will update or save to firebase based on id existence
-  void toFirebase(BuildContext context) {
+  void toFirebase() {
     FirebaseFirestore.instance.collection('notes').doc(id).set(toMap());
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Note saved!'),
-        duration: Duration(seconds: 1),
-      ),
-    );
   }
 
-  void deleteFromFirebase(context) {
+  void deleteFromFirebase() {
     FirebaseFirestore.instance.collection('notes').doc(id).delete();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Note deleted!'),
-        duration: Duration(seconds: 1),
-      ),
-    );
   }
 }

@@ -65,8 +65,17 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               content: _contentController.text,
               createdAt: DateTime.now(),
             );
-            newNote.toFirebase(context);
-            Navigator.of(context).pop();
+            newNote.toFirebase();
+            Navigator.of(context).pushReplacementNamed(
+              NoteDetailScreen.routeName,
+              arguments: newNote,
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Note saved!'),
+                duration: Duration(seconds: 1),
+              ),
+            );
           },
           child: Text('${widget.note == null ? "Add" : "Edit"} Note'),
         ),
@@ -102,8 +111,14 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ),
             IconButton(
               onPressed: () {
-                widget.note!.deleteFromFirebase(context);
+                widget.note!.deleteFromFirebase();
                 Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Note deleted!'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
               },
               icon: const Icon(Icons.delete),
             ),
