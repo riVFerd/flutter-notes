@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/logic/models/note_detail_arguments.dart';
 import 'package:notes/logic/models/note_model.dart';
 
-class NoteDetailScreen extends StatefulWidget {
-  const NoteDetailScreen({super.key, this.note});
+class NoteDetailScreen extends StatelessWidget {
+  NoteDetailScreen({super.key, this.note, this.editMode = false})
+      : titleController = TextEditingController(text: note?.title),
+        contentController = TextEditingController(text: note?.content);
 
   static const routeName = '/note_detail';
   final NoteModel? note;
-
-  @override
-  State<NoteDetailScreen> createState() => _NoteDetailScreenState();
-}
-
-class _NoteDetailScreenState extends State<NoteDetailScreen> {
-  final _titleController = TextEditingController();
-  final _contentController = TextEditingController();
-  bool _editMode = false;
+  final TextEditingController titleController;
+  final TextEditingController contentController;
+  final bool editMode;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.note == null) _editMode = true;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -29,46 +25,50 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             vertical: 8,
           ),
           decoration: const BoxDecoration(color: Colors.black),
-          child: (_editMode) ? addNote(context) : displayNote(context),
+          child: (editMode) ? addNote(context) : displayNote(context),
         ),
       ),
     );
   }
 
   Column addNote(BuildContext context) {
-    if (widget.note != null) {
-      _titleController.text = widget.note!.title;
-      _contentController.text = widget.note!.content;
-    }
     return Column(
       children: [
         TextField(
-          controller: _titleController,
+          controller: titleController,
           decoration: const InputDecoration(
             hintText: 'Title',
           ),
         ),
         const SizedBox(height: 16),
-        TextField(
-          controller: _contentController,
-          decoration: const InputDecoration(
-            hintText: 'Content',
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextField(
+            controller: contentController,
+            maxLines: null,
+            decoration: const InputDecoration(
+              hintText: 'Content',
+              border: InputBorder.none,
+            ),
           ),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
             NoteModel newNote = NoteModel(
-              id: widget.note?.id ??
-                  DateTime.now().millisecondsSinceEpoch.toString(),
-              title: _titleController.text,
-              content: _contentController.text,
+              id: note?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+              title: titleController.text,
+              content: contentController.text,
               createdAt: DateTime.now(),
             );
             newNote.toFirebase();
             Navigator.of(context).pushReplacementNamed(
               NoteDetailScreen.routeName,
-              arguments: newNote,
+              arguments: NoteDetailArguemnts(note: newNote),
             );
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -77,7 +77,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               ),
             );
           },
-          child: Text('${widget.note == null ? "Add" : "Edit"} Note'),
+          child: Text('${note == null ? "Add" : "Edit"} Note'),
         ),
       ],
     );
@@ -88,30 +88,44 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.note!.title,
+          note!.title,
           style: Theme.of(context).textTheme.displaySmall,
         ),
         const SizedBox(height: 8),
-        Text(
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.note!.createdAt),
-          style: Theme.of(context).textTheme.bodyMedium,
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(note!.createdAt),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey,
+                ),
+          ),
         ),
         const SizedBox(height: 16),
         Text(
-          widget.note!.content,
+          note!.content,
           style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.justify,
         ),
         const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () => setState(() => _editMode = true),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(
+                  NoteDetailScreen.routeName,
+                  arguments: NoteDetailArguemnts(
+                    note: note,
+                    editMode: true,
+                  ),
+                );
+              },
               icon: const Icon(Icons.edit),
             ),
             IconButton(
               onPressed: () {
-                widget.note!.deleteFromFirebase();
+                note!.deleteFromFirebase();
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

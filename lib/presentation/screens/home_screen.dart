@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:notes/logic/models/note_detail_arguments.dart';
 import 'package:notes/logic/models/note_model.dart';
 import 'package:notes/presentation/screens/note_detail_screen.dart';
 import 'package:notes/presentation/theme/theme_constants.dart';
@@ -12,7 +13,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notesCollection = FirebaseFirestore.instance.collection('notes').orderBy('createdAt', descending: true);
+    final notesCollection = FirebaseFirestore.instance
+        .collection('notes')
+        .orderBy('createdAt', descending: true);
 
     return SafeArea(
       child: Scaffold(
@@ -35,7 +38,10 @@ class HomeScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
                   ElevatedButton(
-                    onPressed: () => Navigator.of(context).pushNamed(NoteDetailScreen.routeName),
+                    onPressed: () => Navigator.of(context).pushNamed(
+                      NoteDetailScreen.routeName,
+                      arguments: const NoteDetailArguemnts(editMode: true),
+                    ),
                     style: ThemeConstants.roundedButton,
                     child: Text(
                       "Add Note",

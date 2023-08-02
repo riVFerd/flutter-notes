@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/logic/models/note_detail_arguments.dart';
 import 'package:notes/logic/models/note_model.dart';
 import 'package:notes/presentation/screens/note_detail_screen.dart';
 import 'package:notes/presentation/theme/theme_constants.dart';
@@ -19,7 +20,7 @@ class NoteCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         NoteDetailScreen.routeName,
-        arguments: note,
+        arguments: NoteDetailArguemnts(note: note),
       ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
